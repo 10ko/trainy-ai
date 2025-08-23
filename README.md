@@ -1,4 +1,4 @@
-# Bounti Challenge Course Generator
+# Course Generator
 
 A modern, mobile-responsive React course generation application built with shadcn/ui components and powered by OpenRouter AI.
 
@@ -31,7 +31,7 @@ A modern, mobile-responsive React course generation application built with shadc
 1. **Clone and install dependencies**
    ```bash
    git clone <your-repo-url>
-   cd bounti-challenge
+   cd course-generator
    npm install
    ```
 

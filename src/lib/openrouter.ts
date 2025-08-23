@@ -6,7 +6,7 @@ export const openai = new OpenAI({
   baseURL: 'https://openrouter.ai/api/v1',
   defaultHeaders: {
     'HTTP-Referer': window.location.origin,
-    'X-Title': 'Bounti Challenge App',
+    'X-Title': 'Course Generator App',
   },
   dangerouslyAllowBrowser: true, // Note: In production, consider using a backend proxy
 });
