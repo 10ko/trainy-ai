@@ -1,4 +1,4 @@
-import OpenAI from '@openai/api';
+import OpenAI from 'openai';
 
 // Initialize OpenAI client with OpenRouter configuration
 export const openai = new OpenAI({

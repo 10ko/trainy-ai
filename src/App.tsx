@@ -1,20 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card';
 import { Button } from './components/ui/button';
-import { Input } from './components/ui/input';
 import { Textarea } from './components/ui/textarea';
-import { openai, isApiKeyConfigured } from './lib/openrouter';
-import { Send, Bot, User, AlertCircle } from 'lucide-react';
-
-interface Message {
-  id: string;
-  content: string;
-  role: 'user' | 'assistant';
-  timestamp: Date;
-}
+import { isApiKeyConfigured } from './lib/openrouter';
+import { CourseGenerationService, CourseContent, CourseStep } from './services/courseGeneration';
+import { Send, AlertCircle, BookOpen, CheckCircle } from 'lucide-react';
 
 function App() {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [courseContent, setCourseContent] = useState<CourseContent | null>(null);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [apiKeyConfigured, setApiKeyConfigured] = useState(false);
@@ -23,47 +16,22 @@ function App() {
     setApiKeyConfigured(isApiKeyConfigured());
   }, []);
 
-  const sendMessage = async () => {
+  const generateCourse = async () => {
     if (!input.trim() || isLoading || !apiKeyConfigured) return;
 
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      content: input.trim(),
-      role: 'user',
-      timestamp: new Date(),
-    };
-
-    setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
 
     try {
-      const response = await openai.chat.completions.create({
-        model: 'openai/gpt-3.5-turbo',
-        messages: [
-          { role: 'user', content: input.trim() }
-        ],
-        max_tokens: 500,
-        temperature: 0.7,
-      });
-
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        content: response.choices[0]?.message?.content || 'Sorry, I could not generate a response.',
-        role: 'assistant',
-        timestamp: new Date(),
-      };
-
-      setMessages(prev => [...prev, assistantMessage]);
+      const response = await CourseGenerationService.generateStructuredCourseContent(input);
+      
+      if (response.success && response.courseContent) {
+        setCourseContent(response.courseContent);
+      } else {
+        console.error('Error generating course:', response.error);
+      }
     } catch (error) {
-      console.error('Error sending message:', error);
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        content: 'Sorry, there was an error processing your request.',
-        role: 'assistant',
-        timestamp: new Date(),
-      };
-      setMessages(prev => [...prev, errorMessage]);
+      console.error('Error generating course:', error);
     } finally {
       setIsLoading(false);
     }
@@ -72,7 +40,7 @@ function App() {
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      sendMessage();
+      generateCourse();
     }
   };
 
@@ -109,87 +77,87 @@ function App() {
       {/* Header */}
       <div className="border-b bg-card">
         <div className="container mx-auto px-4 py-4">
-          <h1 className="text-xl font-semibold text-center">Bounti Challenge Chat</h1>
+          <h1 className="text-xl font-semibold text-center">Course Content Generator</h1>
         </div>
       </div>
 
-      {/* Messages */}
-      <div className="container mx-auto px-4 py-4 max-w-2xl">
-        <div className="space-y-4 mb-4">
-          {messages.length === 0 && (
-            <Card className="text-center py-8">
-              <CardContent>
-                <Bot className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                <p className="text-muted-foreground">
-                  Start a conversation by typing a message below.
-                </p>
-              </CardContent>
+      {/* Course Content */}
+      <div className="container mx-auto px-4 py-4 max-w-4xl">
+        {!courseContent && !isLoading && (
+          <Card className="text-center py-8">
+            <CardContent>
+              <BookOpen className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+              <p className="text-muted-foreground">
+                Describe the course you want to generate below.
+              </p>
+            </CardContent>
+          </Card>
+        )}
+        
+        {courseContent && (
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-2xl">{courseContent.title}</CardTitle>
+                <p className="text-muted-foreground">{courseContent.description}</p>
+              </CardHeader>
             </Card>
-          )}
-          
-          {messages.map((message) => (
-            <Card key={message.id} className={`${message.role === 'user' ? 'ml-auto' : 'mr-auto'} max-w-[85%]`}>
-              <CardContent className="p-3">
-                <div className="flex items-start gap-2">
-                  <div className={`p-1 rounded-full ${message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
-                    {message.role === 'user' ? (
-                      <User className="h-3 w-3" />
-                    ) : (
-                      <Bot className="h-3 w-3" />
-                    )}
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm">{message.content}</p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      {message.timestamp.toLocaleTimeString()}
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-          
-          {isLoading && (
-            <Card className="mr-auto max-w-[85%]">
-              <CardContent className="p-3">
-                <div className="flex items-start gap-2">
-                  <div className="p-1 rounded-full bg-muted">
-                    <Bot className="h-3 w-3" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex space-x-1">
-                      <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"></div>
-                      <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                      <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+            
+            <div className="space-y-4">
+              {courseContent.content.map((step: CourseStep) => (
+                <Card key={step.step}>
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-4">
+                      <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">
+                        {step.step}
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-lg font-semibold mb-2">{step.title}</h3>
+                        <p className="text-muted-foreground">{step.content}</p>
+                      </div>
+                      <CheckCircle className="h-5 w-5 text-green-500 mt-1" />
                     </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-        </div>
-
-        {/* Input */}
-        <div className="fixed bottom-0 left-0 right-0 bg-background border-t p-4">
-          <div className="max-w-2xl mx-auto">
-            <div className="flex gap-2">
-              <Textarea
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Type your message..."
-                className="min-h-[44px] max-h-32 resize-none"
-                disabled={isLoading}
-              />
-              <Button
-                onClick={sendMessage}
-                disabled={!input.trim() || isLoading}
-                size="icon"
-                className="h-[44px] w-[44px] flex-shrink-0"
-              >
-                <Send className="h-4 w-4" />
-              </Button>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
+          </div>
+        )}
+        
+        {isLoading && (
+          <Card className="text-center py-8">
+            <CardContent>
+              <div className="flex items-center justify-center space-x-2 mb-4">
+                <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
+                <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+              </div>
+              <p className="text-muted-foreground">Generating your course content...</p>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+
+      {/* Input */}
+      <div className="fixed bottom-0 left-0 right-0 bg-background border-t p-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex gap-2">
+            <Textarea
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Describe the course you want to generate (e.g., 'Create a 3-step course on React basics')..."
+              className="min-h-[44px] max-h-32 resize-none"
+              disabled={isLoading}
+            />
+            <Button
+              onClick={generateCourse}
+              disabled={!input.trim() || isLoading}
+              size="icon"
+              className="h-[44px] w-[44px] flex-shrink-0"
+            >
+              <Send className="h-4 w-4" />
+            </Button>
           </div>
         </div>
       </div>

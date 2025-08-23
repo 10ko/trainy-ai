@@ -1,12 +1,12 @@
-# Bounti Challenge Chat App
+# Bounti Challenge Course Generator
 
-A modern, mobile-responsive React chat application built with shadcn/ui components and powered by OpenRouter AI.
+A modern, mobile-responsive React course generation application built with shadcn/ui components and powered by OpenRouter AI.
 
 ## Features
 
 - 🎨 **Modern UI**: Built with shadcn/ui components for a clean, professional look
 - 📱 **Mobile-First**: Responsive design that works perfectly on all devices
-- 🤖 **AI Chat**: Powered by OpenRouter with access to multiple AI models
+- 🤖 **AI Course Generation**: Powered by OpenRouter with access to multiple AI models
 - ⚡ **Fast**: Built with Vite for lightning-fast development and builds
 - 🔒 **Secure**: Environment variable configuration for API keys
 - 🎯 **TypeScript**: Full type safety throughout the application
@@ -87,8 +87,8 @@ src/
 The app is configured to use `openai/gpt-3.5-turbo` by default. You can modify the model in `src/App.tsx`:
 
 ```typescript
-const response = await openai.chat.completions.create({
-  model: 'openai/gpt-3.5-turbo', // Change this to any available model
+const response = await openai.chat.completions.parse({
+  model: 'openai/gpt-4o', // Change this to any available model
   // ... other options
 });
 ```
