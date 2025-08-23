@@ -4,13 +4,14 @@ import { Button } from './components/ui/button';
 import { Textarea } from './components/ui/textarea';
 import { isApiKeyConfigured } from './lib/openrouter';
 import { CourseGenerationService, CourseContent, CourseStep } from './services/courseGeneration';
-import { Send, AlertCircle, BookOpen, CheckCircle } from 'lucide-react';
+import { Send, AlertCircle, BookOpen, CheckCircle, ChevronLeft, ChevronRight, Home } from 'lucide-react';
 
 function App() {
   const [courseContent, setCourseContent] = useState<CourseContent | null>(null);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [apiKeyConfigured, setApiKeyConfigured] = useState(false);
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
   useEffect(() => {
     setApiKeyConfigured(isApiKeyConfigured());
@@ -27,6 +28,7 @@ function App() {
       
       if (response.success && response.courseContent) {
         setCourseContent(response.courseContent);
+        setCurrentStepIndex(0); // Reset to first step
       } else {
         console.error('Error generating course:', response.error);
       }
@@ -43,6 +45,25 @@ function App() {
       generateCourse();
     }
   };
+
+  const goToNextStep = () => {
+    if (courseContent && currentStepIndex < courseContent.content.length - 1) {
+      setCurrentStepIndex(currentStepIndex + 1);
+    }
+  };
+
+  const goToPreviousStep = () => {
+    if (currentStepIndex > 0) {
+      setCurrentStepIndex(currentStepIndex - 1);
+    }
+  };
+
+  const goToHome = () => {
+    setCourseContent(null);
+    setCurrentStepIndex(0);
+  };
+
+
 
   if (!apiKeyConfigured) {
     return (
@@ -72,6 +93,101 @@ function App() {
     );
   }
 
+  // Show course step in full screen
+  if (courseContent && courseContent.content.length > 0) {
+    const currentStep = courseContent.content[currentStepIndex];
+    const isFirstStep = currentStepIndex === 0;
+    const isLastStep = currentStepIndex === courseContent.content.length - 1;
+
+    return (
+      <div 
+        className="min-h-screen bg-background relative overflow-hidden"
+      >
+        {/* Progress bar */}
+        <div className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm">
+          <div className="flex items-center justify-between p-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={goToHome}
+              className="h-8 w-8"
+            >
+              <Home className="h-4 w-4" />
+            </Button>
+            <div className="flex-1 mx-4">
+              <div className="w-full bg-muted rounded-full h-2">
+                <div 
+                  className="bg-primary h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${((currentStepIndex + 1) / courseContent.content.length) * 100}%` }}
+                />
+              </div>
+            </div>
+            <span className="text-sm text-muted-foreground">
+              {currentStepIndex + 1} / {courseContent.content.length}
+            </span>
+          </div>
+        </div>
+
+        {/* Step content */}
+        <div className="pt-20 px-4 pb-24">
+          <div className="max-w-2xl mx-auto">
+            <Card className="border-0 shadow-none bg-transparent">
+              <CardHeader className="text-center pb-6">
+                <div className="w-16 h-16 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+                  {currentStep.step}
+                </div>
+                <CardTitle className="text-3xl font-bold break-words leading-tight px-4">
+                  {currentStep.title}
+                </CardTitle>
+                <p className="text-lg text-muted-foreground mt-2 break-words px-4">
+                  {courseContent.title}
+                </p>
+              </CardHeader>
+              <CardContent className="text-left">
+                <div className="text-lg leading-relaxed max-w-lg mx-auto">
+                  {currentStep.content}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* Navigation buttons */}
+        <div className="fixed bottom-0 left-0 right-0 bg-background/80 backdrop-blur-sm border-t p-4">
+          <div className="max-w-2xl mx-auto flex items-center justify-between gap-4">
+            <Button
+              onClick={goToPreviousStep}
+              disabled={isFirstStep}
+              variant="outline"
+              size="icon"
+              className="w-12 h-12"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            
+            <div className="text-center flex-1 min-w-0">
+              <p className="text-sm text-muted-foreground break-words leading-tight">
+                {currentStep.title}
+              </p>
+            </div>
+
+            <Button
+              onClick={goToNextStep}
+              disabled={isLastStep}
+              className="flex items-center gap-2 w-32 h-12"
+            >
+              Next
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+
+
+      </div>
+    );
+  }
+
+  // Show course generation interface
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -92,36 +208,6 @@ function App() {
               </p>
             </CardContent>
           </Card>
-        )}
-        
-        {courseContent && (
-          <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-2xl">{courseContent.title}</CardTitle>
-                <p className="text-muted-foreground">{courseContent.description}</p>
-              </CardHeader>
-            </Card>
-            
-            <div className="space-y-4">
-              {courseContent.content.map((step: CourseStep) => (
-                <Card key={step.step}>
-                  <CardContent className="p-6">
-                    <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">
-                        {step.step}
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-lg font-semibold mb-2">{step.title}</h3>
-                        <p className="text-muted-foreground">{step.content}</p>
-                      </div>
-                      <CheckCircle className="h-5 w-5 text-green-500 mt-1" />
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
         )}
         
         {isLoading && (
