@@ -28,7 +28,7 @@ function App() {
       
       if (response.success && response.courseContent) {
         setCourseContent(response.courseContent);
-        setCurrentStepIndex(0); // Reset to first step
+        setCurrentStepIndex(-1); // Start at intro page
       } else {
         console.error('Error generating course:', response.error);
       }
@@ -47,13 +47,13 @@ function App() {
   };
 
   const goToNextStep = () => {
-    if (courseContent && currentStepIndex < courseContent.content.length - 1) {
+    if (courseContent && currentStepIndex < courseContent.content.length) {
       setCurrentStepIndex(currentStepIndex + 1);
     }
   };
 
   const goToPreviousStep = () => {
-    if (currentStepIndex > 0) {
+    if (currentStepIndex > -1) {
       setCurrentStepIndex(currentStepIndex - 1);
     }
   };
@@ -96,8 +96,122 @@ function App() {
   // Show course step in full screen
   if (courseContent && courseContent.content.length > 0) {
     const currentStep = courseContent.content[currentStepIndex];
-    const isFirstStep = currentStepIndex === 0;
-    const isLastStep = currentStepIndex === courseContent.content.length - 1;
+    const isFirstStep = currentStepIndex === -1;
+    const isLastStep = currentStepIndex === courseContent.content.length;
+    
+    // Intro page (step -1)
+    if (currentStepIndex === -1) {
+      return (
+        <div className="min-h-screen bg-background relative overflow-hidden">
+          {/* Progress bar */}
+          <div className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm">
+            <div className="flex items-center justify-between p-4">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={goToHome}
+                className="h-8 w-8"
+              >
+                <Home className="h-4 w-4" />
+              </Button>
+              <div className="flex-1 mx-4">
+                <div className="w-full bg-muted rounded-full h-2">
+                  <div 
+                    className="bg-primary h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${0}%` }}
+                  />
+                </div>
+              </div>
+              <span className="text-sm text-muted-foreground">
+                Intro
+              </span>
+            </div>
+          </div>
+
+          {/* Intro content */}
+          <div className="pt-20 px-4 pb-24">
+            <div className="max-w-2xl mx-auto">
+              <Card className="border-0 shadow-none bg-transparent">
+                <CardHeader className="text-center pb-6">
+                  <BookOpen className="h-16 w-16 text-primary mx-auto mb-6" />
+                  <CardTitle className="text-4xl font-bold break-words leading-tight px-4 mb-4">
+                    {courseContent.title}
+                  </CardTitle>
+                  <p className="text-xl text-muted-foreground break-words px-4 leading-relaxed">
+                    {courseContent.description}
+                  </p>
+                </CardHeader>
+                <CardContent className="text-center">
+                  <Button
+                    onClick={() => setCurrentStepIndex(0)}
+                    className="w-48 h-14 text-lg font-semibold"
+                  >
+                    Start Course
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    
+    // Success page (step after last)
+    if (currentStepIndex === courseContent.content.length) {
+      return (
+        <div className="min-h-screen bg-background relative overflow-hidden">
+          {/* Progress bar */}
+          <div className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm">
+            <div className="flex items-center justify-between p-4">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={goToHome}
+                className="h-8 w-8"
+              >
+                <Home className="h-4 w-4" />
+              </Button>
+              <div className="flex-1 mx-4">
+                <div className="w-full bg-muted rounded-full h-2">
+                  <div 
+                    className="bg-primary h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${100}%` }}
+                  />
+                </div>
+              </div>
+              <span className="text-sm text-muted-foreground">
+                Complete!
+              </span>
+            </div>
+          </div>
+
+          {/* Success content */}
+          <div className="pt-20 px-4 pb-24">
+            <div className="max-w-2xl mx-auto">
+              <Card className="border-0 shadow-none bg-transparent">
+                <CardHeader className="text-center pb-6">
+                  <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-6" />
+                  <CardTitle className="text-4xl font-bold break-words leading-tight px-4 mb-4">
+                    Congratulations!
+                  </CardTitle>
+                  <p className="text-xl text-muted-foreground break-words px-4 leading-relaxed">
+                    You have successfully completed the course: <strong>{courseContent.title}</strong>
+                  </p>
+                </CardHeader>
+                <CardContent className="text-center">
+                  <Button
+                    onClick={goToHome}
+                    className="w-48 h-14 text-lg font-semibold"
+                  >
+                    Back to Home
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      );
+    }
 
     return (
       <div 
