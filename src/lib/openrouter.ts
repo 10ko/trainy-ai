@@ -23,15 +23,3 @@ export const getOpenAIClient = (): OpenAI => {
     dangerouslyAllowBrowser: true, // Note: In production, consider using a backend proxy
   })
 }
-
-// Helper function to get available models
-export const getAvailableModels = async () => {
-  try {
-    const client = getOpenAIClient()
-    const response = await client.models.list()
-    return response.data
-  } catch (error) {
-    console.error('Error fetching models:', error)
-    return []
-  }
-}
