@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
-import { BookOpen, Send } from 'lucide-react';
+import { BookOpen, Sparkles } from 'lucide-react';
 
 interface CourseInputProps {
   input: string;
@@ -24,7 +24,7 @@ export function CourseInput({
     <>
       {/* Course Content - Using same style as CourseIntro */}
       <div className="pt-20 px-4 pb-24">
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           {!courseContent && !isLoading && (
             <Card className="border-0 shadow-none bg-transparent">
               <CardHeader className="text-center pb-6">
@@ -37,27 +37,26 @@ export function CourseInput({
                 </p>
               </CardHeader>
               <CardContent className="text-center">
-                <div className="max-w-lg mx-auto">
-                  <div className="flex gap-3 items-end mb-6">
-                    <div className="flex-1">
-                      <Textarea
-                        value={input}
-                        onChange={(e) => onInputChange(e.target.value)}
-                        onKeyPress={onKeyPress}
-                        placeholder="e.g., 'Create a 3-step course on React basics'"
-                        className="min-h-[60px] max-h-40 resize-none border-0 shadow-none bg-muted/30 rounded-2xl px-6 py-4 text-base placeholder:text-muted-foreground/60 focus:bg-muted/50 focus:ring-2 focus:ring-primary/20 transition-all duration-200"
-                        disabled={isLoading}
-                      />
-                    </div>
-                    <Button
-                      onClick={onGenerateCourse}
-                      disabled={!input.trim() || isLoading}
-                      size="icon"
-                      className="h-[60px] w-[60px] rounded-2xl bg-primary hover:bg-primary/90 shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      <Send className="h-5 w-5" />
-                    </Button>
+                <div className="w-full max-w-3xl mx-auto">
+                  <div className="w-full mb-4">
+                    <Textarea
+                      value={input}
+                      onChange={(e) => onInputChange(e.target.value)}
+                      onKeyPress={onKeyPress}
+                      placeholder="e.g., 'Create a 3-step course on React basics'"
+                      className="w-full min-h-[90px] max-h-[90px] resize-none shadow-sm bg-muted/30 rounded-lg px-3 py-2 text-base placeholder:text-muted-foreground/60 transition-all duration-200 border border-muted-foreground/20 focus:border-primary/60"
+                      disabled={isLoading}
+                      rows={3}
+                    />
                   </div>
+                  <Button
+                    onClick={onGenerateCourse}
+                    disabled={!input.trim() || isLoading}
+                    className="w-full h-14 rounded-lg bg-primary hover:bg-primary/90 shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-lg font-semibold"
+                  >
+                    <Sparkles className="h-5 w-5 mr-2" />
+                    Generate Course
+                  </Button>
                 </div>
               </CardContent>
             </Card>
