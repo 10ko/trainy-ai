@@ -2,6 +2,21 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 import { BookOpen, Sparkles } from 'lucide-react';
+import { useState, useEffect } from 'react';
+
+// Pool of blue collar job task examples
+const EXAMPLE_TASKS = [
+  'how to make a flat white',
+  'how to bake a pizza',
+  'how to use a drill properly',
+  'how to wait a table',
+  'how to change a car tire',
+  'how to install a light fixture',
+  'how to operate a forklift',
+  'how to prepare a burger',
+  'how to paint a wall',
+  'how to fix a leaky faucet'
+];
 
 interface CourseInputProps {
   input: string;
@@ -20,6 +35,13 @@ export function CourseInput({
   onGenerateCourse,
   onKeyPress
 }: CourseInputProps) {
+  const [currentExample, setCurrentExample] = useState('');
+
+  // Select a random example on component mount
+  useEffect(() => {
+    const randomIndex = Math.floor(Math.random() * EXAMPLE_TASKS.length);
+    setCurrentExample(EXAMPLE_TASKS[randomIndex]);
+  }, []);
   return (
     <>
       {/* Course Content - Using same style as CourseIntro */}
@@ -43,7 +65,7 @@ export function CourseInput({
                       value={input}
                       onChange={(e) => onInputChange(e.target.value)}
                       onKeyPress={onKeyPress}
-                      placeholder="e.g., 'Create a 3-step course on React basics'"
+                      placeholder={`e.g., '${currentExample}'`}
                       className="w-full min-h-[90px] max-h-[90px] resize-none bg-muted/30 rounded-lg px-3 py-2 text-base placeholder:text-muted-foreground/60 border border-muted-foreground/20 focus:border-primary/60"
                       disabled={isLoading}
                       rows={3}
