@@ -7,6 +7,7 @@ import {
 import {
   CourseIntro,
   CourseStep,
+  CourseQuiz,
   CourseSuccess,
   CourseInput,
   ConfigurationError,
@@ -18,6 +19,8 @@ function App() {
   const [isLoading, setIsLoading] = useState(false)
   const [apiKeyConfigured, setApiKeyConfigured] = useState(false)
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
+  const [currentQuizIndex, setCurrentQuizIndex] = useState(0)
+  const [isInQuiz, setIsInQuiz] = useState(false)
 
   useEffect(() => {
     const configured = isApiKeyConfigured()
@@ -54,8 +57,15 @@ function App() {
   }
 
   const goToNextStep = () => {
-    if (courseContent && currentStepIndex <= courseContent.content.length) {
+    if (courseContent && currentStepIndex < courseContent.content.length - 1) {
       setCurrentStepIndex(currentStepIndex + 1)
+    } else if (
+      courseContent &&
+      currentStepIndex === courseContent.content.length - 1
+    ) {
+      // After last step, go to quiz
+      setIsInQuiz(true)
+      setCurrentQuizIndex(0)
     }
   }
 
@@ -65,9 +75,32 @@ function App() {
     }
   }
 
+  const goToNextQuestion = () => {
+    if (courseContent && currentQuizIndex < courseContent.quiz.length - 1) {
+      setCurrentQuizIndex(currentQuizIndex + 1)
+    }
+  }
+
+  const goToPreviousQuestion = () => {
+    if (currentQuizIndex > 0) {
+      setCurrentQuizIndex(currentQuizIndex - 1)
+    } else {
+      // Go back to last course step
+      setIsInQuiz(false)
+      setCurrentStepIndex(courseContent!.content.length - 1)
+    }
+  }
+
+  const handleQuizComplete = () => {
+    setIsInQuiz(false)
+    setCurrentStepIndex(courseContent!.content.length) // Go to success page
+  }
+
   const goToHome = () => {
     setCourseContent(null)
     setCurrentStepIndex(0)
+    setCurrentQuizIndex(0)
+    setIsInQuiz(false)
   }
 
   // Show configuration error if API key is not configured
@@ -88,7 +121,26 @@ function App() {
       )
     }
 
-    // Success page (step after last)
+    // Quiz section
+    if (isInQuiz && courseContent.quiz && courseContent.quiz.length > 0) {
+      const isFirstQuestion = currentQuizIndex === 0
+      const isLastQuestion = currentQuizIndex === courseContent.quiz.length - 1
+
+      return (
+        <CourseQuiz
+          courseContent={courseContent}
+          currentQuestionIndex={currentQuizIndex}
+          isFirstQuestion={isFirstQuestion}
+          isLastQuestion={isLastQuestion}
+          onPreviousQuestion={goToPreviousQuestion}
+          onNextQuestion={goToNextQuestion}
+          onGoHome={goToHome}
+          onQuizComplete={handleQuizComplete}
+        />
+      )
+    }
+
+    // Success page (step after quiz completion)
     if (currentStepIndex === courseContent.content.length) {
       return (
         <CourseSuccess courseContent={courseContent} onBackToHome={goToHome} />

@@ -8,10 +8,18 @@ export interface CourseStep {
   content: string
 }
 
+export interface QuizQuestion {
+  question: string
+  options: string[]
+  correctAnswer: number // Index of the correct option (0-based)
+  explanation: string
+}
+
 export interface CourseContent {
   title: string
   description: string
   content: CourseStep[]
+  quiz: QuizQuestion[]
 }
 
 export interface CourseGenerationResponse {
@@ -27,10 +35,18 @@ const CourseStepSchema = z.object({
   content: z.string().min(1),
 })
 
+const QuizQuestionSchema = z.object({
+  question: z.string().min(1),
+  options: z.array(z.string().min(1)).length(4), // Exactly 4 options
+  correctAnswer: z.number().int().min(0).max(3), // 0-3 for 4 options
+  explanation: z.string().min(1),
+})
+
 const CourseContentSchema = z.object({
   title: z.string().min(1),
   description: z.string().min(1),
   content: z.array(CourseStepSchema).min(5).max(10),
+  quiz: z.array(QuizQuestionSchema).length(3), // Exactly 3 quiz questions
 })
 
 /**
@@ -41,7 +57,15 @@ export function createCoursePrompt(userRequest: string): string {
 Today I will be learning about the following task: ${userRequest}.
 Return the response as a valid JSON. The content of each step should contain the instruction for the person to learn how to fullfill the step.
 I want only practical steps and not theoretical ones, give me at least 5 steps and max 10 steps.
-If a step requires handling ingredients or amounts, I want precise quantities and measurements. Avoid numbered lists for the content of the steps`
+If a step requires handling ingredients or amounts, I want precise quantities and measurements. Avoid numbered lists for the content of the steps.
+
+Additionally, include exactly 3 quiz questions to test the user's knowledge after completing the course. Each quiz question should have:
+- A clear question about the practical skills learned
+- Exactly 4 multiple choice options (A, B, C, D)
+- The correct answer (0-3, where 0=A, 1=B, 2=C, 3=D)
+- A brief explanation of why the answer is correct
+
+Make the quiz questions practical and relevant to the actual job tasks covered in the course.`
 }
 
 /**
