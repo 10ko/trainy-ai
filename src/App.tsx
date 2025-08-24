@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { isApiKeyConfigured } from './lib/openrouter';
-import { CourseGenerationService, CourseContent } from './services/courseGeneration';
+import { generateStructuredCourseContent, CourseContent } from './services/courseGeneration';
 import {
   CourseIntro,
   CourseStep,
@@ -27,7 +27,7 @@ function App() {
     setIsLoading(true);
 
     try {
-      const response = await CourseGenerationService.generateStructuredCourseContent(input);
+      const response = await generateStructuredCourseContent(input);
       
       if (response.success && response.courseContent) {
         setCourseContent(response.courseContent);

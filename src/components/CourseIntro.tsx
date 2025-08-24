@@ -29,7 +29,7 @@ export function CourseIntro({ courseContent, onStartCourse, onGoHome }: CourseIn
               <div className="text-center mb-6">
                 <BookOpen className="h-16 w-16 text-primary mx-auto" />
               </div>
-              <div className="text-left">
+              <div className="text-center">
                 <CardTitle className="text-4xl font-bold break-words leading-tight mb-4">
                   {courseContent.title}
                 </CardTitle>
