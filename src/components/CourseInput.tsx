@@ -44,7 +44,7 @@ export function CourseInput({
                       onChange={(e) => onInputChange(e.target.value)}
                       onKeyPress={onKeyPress}
                       placeholder="e.g., 'Create a 3-step course on React basics'"
-                      className="w-full min-h-[90px] max-h-[90px] resize-none shadow-sm bg-muted/30 rounded-lg px-3 py-2 text-base placeholder:text-muted-foreground/60 transition-all duration-200 border border-muted-foreground/20 focus:border-primary/60"
+                      className="w-full min-h-[90px] max-h-[90px] resize-none bg-muted/30 rounded-lg px-3 py-2 text-base placeholder:text-muted-foreground/60 border border-muted-foreground/20 focus:border-primary/60"
                       disabled={isLoading}
                       rows={3}
                     />
