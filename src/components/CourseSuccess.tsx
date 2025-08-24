@@ -60,8 +60,8 @@ export function CourseSuccess({ courseContent, onBackToHome }: CourseSuccessProp
       <div className="pt-20 px-4 pb-24">
         <div className="max-w-2xl mx-auto">
           <Card className="border-0 shadow-none bg-transparent">
-            <CardHeader className="text-center pb-6">
-              <CheckCircle className="h-16 w-16 text-primary mx-auto mb-6 animate-bounce" style={{ animationIterationCount: 1 }} />
+            <CardHeader className="text-center pb-16">
+              <CheckCircle className="h-16 w-16 text-primary mx-auto mb-6 animate-bounce" style={{ animationDuration: '2s', animationIterationCount: 'infinite' }} />
               <CardTitle className="text-4xl font-bold break-words leading-tight px-4 mb-4">
                 Congratulations!
               </CardTitle>

@@ -1,4 +1,4 @@
-import { openai } from '../lib/openrouter';
+import { getOpenAIClient } from '../lib/openrouter';
 import { z } from 'zod';
 import { zodResponseFormat } from 'openai/helpers/zod';
 
@@ -50,8 +50,9 @@ If a step requires handling ingredients or amounts, I want precise quantities an
 export async function generateStructuredCourseContent(prompt: string): Promise<CourseGenerationResponse> {
   try {
     const coursePrompt = createCoursePrompt(prompt);
+    const client = getOpenAIClient();
     
-    const response = await openai.chat.completions.parse({
+    const response = await client.chat.completions.parse({
       model: 'openai/gpt-4o',
       messages: [
         { 

@@ -17,7 +17,10 @@ function App() {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
   useEffect(() => {
-    setApiKeyConfigured(isApiKeyConfigured());
+    const configured = isApiKeyConfigured();
+    console.log('API Key configured:', configured);
+    console.log('Environment variable:', import.meta.env.VITE_OPENROUTER_API_KEY);
+    setApiKeyConfigured(configured);
   }, []);
 
   const generateCourse = async () => {
