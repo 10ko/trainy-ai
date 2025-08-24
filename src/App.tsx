@@ -122,7 +122,7 @@ function App() {
       {/* Header */}
       <div className="py-6">
         <div className="text-center">
-          <h1 className="text-2xl font-semibold text-foreground">Course Generator</h1>
+          <h1 className="text-2xl font-semibold text-foreground">Trainy AI</h1>
         </div>
       </div>
 
