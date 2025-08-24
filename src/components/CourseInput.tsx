@@ -1,5 +1,4 @@
-import React from 'react';
-import { Card, CardContent } from './ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 import { BookOpen, Send } from 'lucide-react';
@@ -23,54 +22,67 @@ export function CourseInput({
 }: CourseInputProps) {
   return (
     <>
-      {/* Course Content */}
-      <div className="container mx-auto px-4 py-4 max-w-4xl">
-        {!courseContent && !isLoading && (
-          <Card className="text-center py-8">
-            <CardContent>
-              <BookOpen className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-              <p className="text-muted-foreground">
-                Describe the course you want to generate below.
-              </p>
-            </CardContent>
-          </Card>
-        )}
-        
-        {isLoading && (
-          <Card className="text-center py-8">
-            <CardContent>
-              <div className="flex items-center justify-center space-x-2 mb-4">
-                <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-              </div>
-              <p className="text-muted-foreground">Generating your course content...</p>
-            </CardContent>
-          </Card>
-        )}
-      </div>
-
-      {/* Input */}
-      <div className="fixed bottom-0 left-0 right-0 bg-background border-t p-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex gap-2">
-            <Textarea
-              value={input}
-              onChange={(e) => onInputChange(e.target.value)}
-              onKeyPress={onKeyPress}
-              placeholder="Describe the course you want to generate (e.g., 'Create a 3-step course on React basics')..."
-              className="min-h-[44px] max-h-32 resize-none"
-              disabled={isLoading}
-            />
-            <Button
-              onClick={onGenerateCourse}
-              disabled={!input.trim() || isLoading}
-              size="icon"
-              className="h-[44px] w-[44px] flex-shrink-0"
-            >
-              <Send className="h-4 w-4" />
-            </Button>
-          </div>
+      {/* Course Content - Using same style as CourseIntro */}
+      <div className="pt-20 px-4 pb-24">
+        <div className="max-w-2xl mx-auto">
+          {!courseContent && !isLoading && (
+            <Card className="border-0 shadow-none bg-transparent">
+              <CardHeader className="text-center pb-6">
+                <BookOpen className="h-16 w-16 text-primary mx-auto mb-6" />
+                <CardTitle className="text-4xl font-bold break-words leading-tight px-4 mb-4">
+                  What would you like to learn today?
+                </CardTitle>
+                <p className="text-xl text-muted-foreground break-words px-4 leading-relaxed">
+                  Describe the course you want to generate below.
+                </p>
+              </CardHeader>
+              <CardContent className="text-center">
+                <div className="max-w-lg mx-auto">
+                  <div className="flex gap-3 items-end mb-6">
+                    <div className="flex-1">
+                      <Textarea
+                        value={input}
+                        onChange={(e) => onInputChange(e.target.value)}
+                        onKeyPress={onKeyPress}
+                        placeholder="e.g., 'Create a 3-step course on React basics'"
+                        className="min-h-[60px] max-h-40 resize-none border-0 shadow-none bg-muted/30 rounded-2xl px-6 py-4 text-base placeholder:text-muted-foreground/60 focus:bg-muted/50 focus:ring-2 focus:ring-primary/20 transition-all duration-200"
+                        disabled={isLoading}
+                      />
+                    </div>
+                    <Button
+                      onClick={onGenerateCourse}
+                      disabled={!input.trim() || isLoading}
+                      size="icon"
+                      className="h-[60px] w-[60px] rounded-2xl bg-primary hover:bg-primary/90 shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <Send className="h-5 w-5" />
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+          
+          {isLoading && (
+            <Card className="border-0 shadow-none bg-transparent">
+              <CardHeader className="text-center pb-6">
+                <BookOpen className="h-16 w-16 text-primary mx-auto mb-6" />
+                <CardTitle className="text-4xl font-bold break-words leading-tight px-4 mb-4">
+                  Creating your course...
+                </CardTitle>
+                <p className="text-xl text-muted-foreground break-words px-4 leading-relaxed">
+                  This will just take a moment
+                </p>
+              </CardHeader>
+              <CardContent className="text-center">
+                <div className="flex items-center justify-center space-x-2 mb-4">
+                  <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
+                  <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                  <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
     </>

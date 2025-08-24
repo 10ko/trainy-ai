@@ -117,9 +117,9 @@ function App() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="border-b bg-card">
-        <div className="container mx-auto px-4 py-4">
-          <h1 className="text-xl font-semibold text-center">Course Content Generator</h1>
+      <div className="py-6">
+        <div className="text-center">
+          <h1 className="text-2xl font-semibold text-foreground">Course Generator</h1>
         </div>
       </div>
 
