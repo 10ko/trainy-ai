@@ -59,7 +59,7 @@ Return the response as a valid JSON. The content of each step should contain the
 I want only practical steps and not theoretical ones, give me at least 5 steps and max 10 steps.
 If a step requires handling ingredients or amounts, I want precise quantities and measurements. Avoid numbered lists for the content of the steps.
 
-Additionally, include exactly 3 quiz questions to test the user's knowledge after completing the course. Each quiz question should have:
+Additionally, include exactly 3 quiz questions to test my knowledge after completing the course. Each quiz question should have:
 - A clear question about the practical skills learned
 - Exactly 4 multiple choice options (A, B, C, D)
 - The correct answer (0-3, where 0=A, 1=B, 2=C, 3=D)
