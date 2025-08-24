@@ -1,75 +1,78 @@
-import React, { useState, useEffect } from 'react';
-import { isApiKeyConfigured } from './lib/openrouter';
-import { generateStructuredCourseContent, CourseContent } from './services/courseGeneration';
+import React, { useState, useEffect } from 'react'
+import { isApiKeyConfigured } from './lib/openrouter'
+import {
+  generateStructuredCourseContent,
+  CourseContent,
+} from './services/courseGeneration'
 import {
   CourseIntro,
   CourseStep,
   CourseSuccess,
   CourseInput,
-  ConfigurationError
-} from './components';
+  ConfigurationError,
+} from './components'
 
 function App() {
-  const [courseContent, setCourseContent] = useState<CourseContent | null>(null);
-  const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [apiKeyConfigured, setApiKeyConfigured] = useState(false);
-  const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const [courseContent, setCourseContent] = useState<CourseContent | null>(null)
+  const [input, setInput] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [apiKeyConfigured, setApiKeyConfigured] = useState(false)
+  const [currentStepIndex, setCurrentStepIndex] = useState(0)
 
   useEffect(() => {
-    const configured = isApiKeyConfigured();
-    setApiKeyConfigured(configured);
-  }, []);
+    const configured = isApiKeyConfigured()
+    setApiKeyConfigured(configured)
+  }, [])
 
   const generateCourse = async () => {
-    if (!input.trim() || isLoading || !apiKeyConfigured) return;
+    if (!input.trim() || isLoading || !apiKeyConfigured) return
 
-    setInput('');
-    setIsLoading(true);
+    setInput('')
+    setIsLoading(true)
 
     try {
-      const response = await generateStructuredCourseContent(input);
-      
+      const response = await generateStructuredCourseContent(input)
+
       if (response.success && response.courseContent) {
-        setCourseContent(response.courseContent);
-        setCurrentStepIndex(-1); // Start at intro page
+        setCourseContent(response.courseContent)
+        setCurrentStepIndex(-1) // Start at intro page
       } else {
-        console.error('Error generating course:', response.error);
+        console.error('Error generating course:', response.error)
       }
     } catch (error) {
-      console.error('Error generating course:', error);
+      console.error('Error generating course:', error)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      generateCourse();
+      e.preventDefault()
+      generateCourse()
     }
-  };
+  }
 
   const goToNextStep = () => {
     if (courseContent && currentStepIndex <= courseContent.content.length) {
-      setCurrentStepIndex(currentStepIndex + 1);
+      setCurrentStepIndex(currentStepIndex + 1)
     }
-  };
+  }
 
   const goToPreviousStep = () => {
     if (currentStepIndex > -1) {
-      setCurrentStepIndex(currentStepIndex - 1);
+      setCurrentStepIndex(currentStepIndex - 1)
     }
-  };
+  }
 
   const goToHome = () => {
-    setCourseContent(null);
-    setCurrentStepIndex(0);
-  };
+    setCourseContent(null)
+    setCurrentStepIndex(0)
+  }
 
   // Show configuration error if API key is not configured
   if (!apiKeyConfigured) {
-    return <ConfigurationError />;
+    return <ConfigurationError />
   }
 
   // Show course content if available
@@ -82,23 +85,20 @@ function App() {
           onStartCourse={() => setCurrentStepIndex(0)}
           onGoHome={goToHome}
         />
-      );
+      )
     }
-    
+
     // Success page (step after last)
     if (currentStepIndex === courseContent.content.length) {
       return (
-        <CourseSuccess
-          courseContent={courseContent}
-          onBackToHome={goToHome}
-        />
-      );
+        <CourseSuccess courseContent={courseContent} onBackToHome={goToHome} />
+      )
     }
 
     // Regular course step
-    const currentStep = courseContent.content[currentStepIndex];
-    const isFirstStep = currentStepIndex === 0;
-    const isLastStep = currentStepIndex === courseContent.content.length - 1;
+    const currentStep = courseContent.content[currentStepIndex]
+    const isFirstStep = currentStepIndex === 0
+    const isLastStep = currentStepIndex === courseContent.content.length - 1
 
     return (
       <CourseStep
@@ -111,7 +111,7 @@ function App() {
         onNextStep={goToNextStep}
         onGoHome={goToHome}
       />
-    );
+    )
   }
 
   // Show course generation interface
@@ -133,7 +133,7 @@ function App() {
         onKeyPress={handleKeyPress}
       />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

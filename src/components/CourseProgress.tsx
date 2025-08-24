@@ -1,15 +1,19 @@
-
-import { Button } from './ui/button';
-import { Home } from 'lucide-react';
+import { Button } from './ui/button'
+import { Home } from 'lucide-react'
 
 interface CourseProgressProps {
-  progress: number;
-  currentStep: string | number;
-  totalSteps?: number;
-  onGoHome: () => void;
+  progress: number
+  currentStep: string | number
+  totalSteps?: number
+  onGoHome: () => void
 }
 
-export function CourseProgress({ progress, currentStep, totalSteps, onGoHome }: CourseProgressProps) {
+export function CourseProgress({
+  progress,
+  currentStep,
+  totalSteps,
+  onGoHome,
+}: CourseProgressProps) {
   return (
     <div className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm">
       <div className="flex items-center justify-between p-4">
@@ -23,7 +27,7 @@ export function CourseProgress({ progress, currentStep, totalSteps, onGoHome }: 
         </Button>
         <div className="flex-1 mx-4">
           <div className="w-full bg-muted rounded-full h-2">
-            <div 
+            <div
               className="bg-primary h-2 rounded-full transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
@@ -34,5 +38,5 @@ export function CourseProgress({ progress, currentStep, totalSteps, onGoHome }: 
         </span>
       </div>
     </div>
-  );
+  )
 }

@@ -22,13 +22,14 @@ A modern, mobile-responsive React course generation application built with shadc
 
 ## Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - npm, yarn, or pnpm
 - OpenRouter API key ([Get one here](https://openrouter.ai/keys))
 
 ## Quick Start
 
 1. **Clone and install dependencies**
+
    ```bash
    git clone <your-repo-url>
    cd course-generator
@@ -36,16 +37,19 @@ A modern, mobile-responsive React course generation application built with shadc
    ```
 
 2. **Configure environment variables**
+
    ```bash
    cp env.example .env.local
    ```
-   
+
    Edit `.env.local` and add your OpenRouter API key:
+
    ```env
    VITE_OPENROUTER_API_KEY=your_actual_api_key_here
    ```
 
 3. **Start development server**
+
    ```bash
    npm run dev
    ```
@@ -78,9 +82,9 @@ src/
 
 ### Environment Variables
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `VITE_OPENROUTER_API_KEY` | Your OpenRouter API key | Yes |
+| Variable                  | Description             | Required |
+| ------------------------- | ----------------------- | -------- |
+| `VITE_OPENROUTER_API_KEY` | Your OpenRouter API key | Yes      |
 
 ### OpenRouter Models
 
@@ -90,7 +94,7 @@ The app is configured to use `openai/gpt-3.5-turbo` by default. You can modify t
 const response = await openai.chat.completions.parse({
   model: 'openai/gpt-4o', // Change this to any available model
   // ... other options
-});
+})
 ```
 
 ## Mobile Responsiveness
@@ -107,6 +111,7 @@ The app is built with mobile-first design principles:
 ### Adding New shadcn/ui Components
 
 1. Install the component:
+
    ```bash
    npx shadcn@latest add [component-name]
    ```
@@ -152,6 +157,7 @@ This project is open source and available under the [MIT License](LICENSE).
 ## Support
 
 For issues and questions:
+
 - Check the [OpenRouter documentation](https://openrouter.ai/docs)
 - Review the [shadcn/ui documentation](https://ui.shadcn.com/)
 - Open an issue in this repository

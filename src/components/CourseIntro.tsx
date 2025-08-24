@@ -1,25 +1,24 @@
-
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Button } from './ui/button';
-import { BookOpen } from 'lucide-react';
-import { CourseContent } from '../services/courseGeneration';
-import { CourseProgress } from './CourseProgress';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
+import { Button } from './ui/button'
+import { BookOpen } from 'lucide-react'
+import { CourseContent } from '../services/courseGeneration'
+import { CourseProgress } from './CourseProgress'
 
 interface CourseIntroProps {
-  courseContent: CourseContent;
-  onStartCourse: () => void;
-  onGoHome: () => void;
+  courseContent: CourseContent
+  onStartCourse: () => void
+  onGoHome: () => void
 }
 
-export function CourseIntro({ courseContent, onStartCourse, onGoHome }: CourseIntroProps) {
+export function CourseIntro({
+  courseContent,
+  onStartCourse,
+  onGoHome,
+}: CourseIntroProps) {
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
       {/* Progress bar */}
-      <CourseProgress
-        progress={0}
-        currentStep="Intro"
-        onGoHome={onGoHome}
-      />
+      <CourseProgress progress={0} currentStep="Intro" onGoHome={onGoHome} />
 
       {/* Intro content */}
       <div className="pt-20 px-4 pb-24">
@@ -50,5 +49,5 @@ export function CourseIntro({ courseContent, onStartCourse, onGoHome }: CourseIn
         </div>
       </div>
     </div>
-  );
+  )
 }

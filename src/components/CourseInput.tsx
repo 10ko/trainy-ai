@@ -1,8 +1,8 @@
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Button } from './ui/button';
-import { Textarea } from './ui/textarea';
-import { BookOpen, Sparkles } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
+import { Button } from './ui/button'
+import { Textarea } from './ui/textarea'
+import { BookOpen, Sparkles } from 'lucide-react'
+import { useState, useEffect } from 'react'
 
 // Pool of blue collar job task examples
 const EXAMPLE_TASKS = [
@@ -15,16 +15,16 @@ const EXAMPLE_TASKS = [
   'how to operate a forklift',
   'how to prepare a burger',
   'how to paint a wall',
-  'how to fix a leaky faucet'
-];
+  'how to fix a leaky faucet',
+]
 
 interface CourseInputProps {
-  input: string;
-  isLoading: boolean;
-  courseContent: any;
-  onInputChange: (value: string) => void;
-  onGenerateCourse: () => void;
-  onKeyPress: (e: React.KeyboardEvent) => void;
+  input: string
+  isLoading: boolean
+  courseContent: any
+  onInputChange: (value: string) => void
+  onGenerateCourse: () => void
+  onKeyPress: (e: React.KeyboardEvent) => void
 }
 
 export function CourseInput({
@@ -33,15 +33,15 @@ export function CourseInput({
   courseContent,
   onInputChange,
   onGenerateCourse,
-  onKeyPress
+  onKeyPress,
 }: CourseInputProps) {
-  const [currentExample, setCurrentExample] = useState('');
+  const [currentExample, setCurrentExample] = useState('')
 
   // Select a random example on component mount
   useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * EXAMPLE_TASKS.length);
-    setCurrentExample(EXAMPLE_TASKS[randomIndex]);
-  }, []);
+    const randomIndex = Math.floor(Math.random() * EXAMPLE_TASKS.length)
+    setCurrentExample(EXAMPLE_TASKS[randomIndex])
+  }, [])
   return (
     <>
       {/* Course Content - Using same style as CourseIntro */}
@@ -63,7 +63,7 @@ export function CourseInput({
                   <div className="w-full mb-4">
                     <Textarea
                       value={input}
-                      onChange={(e) => onInputChange(e.target.value)}
+                      onChange={e => onInputChange(e.target.value)}
                       onKeyPress={onKeyPress}
                       placeholder={`e.g., '${currentExample}'`}
                       className="w-full min-h-[90px] max-h-[90px] resize-none bg-muted/30 rounded-lg px-3 py-2 text-base placeholder:text-muted-foreground/60 border border-muted-foreground/20 focus:border-primary/60"
@@ -83,7 +83,7 @@ export function CourseInput({
               </CardContent>
             </Card>
           )}
-          
+
           {isLoading && (
             <Card className="border-0 shadow-none bg-transparent">
               <CardHeader className="text-center pb-6">
@@ -98,8 +98,14 @@ export function CourseInput({
               <CardContent className="text-center">
                 <div className="flex items-center justify-center space-x-2 mb-4">
                   <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                  <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                  <div
+                    className="w-2 h-2 bg-primary rounded-full animate-bounce"
+                    style={{ animationDelay: '0.1s' }}
+                  ></div>
+                  <div
+                    className="w-2 h-2 bg-primary rounded-full animate-bounce"
+                    style={{ animationDelay: '0.2s' }}
+                  ></div>
                 </div>
               </CardContent>
             </Card>
@@ -107,5 +113,5 @@ export function CourseInput({
         </div>
       </div>
     </>
-  );
+  )
 }

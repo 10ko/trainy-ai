@@ -1,18 +1,20 @@
-
-import { useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Button } from './ui/button';
-import { CheckCircle } from 'lucide-react';
-import { CourseContent } from '../services/courseGeneration';
-import { CourseProgress } from './CourseProgress';
-import confetti from 'canvas-confetti';
+import { useEffect } from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
+import { Button } from './ui/button'
+import { CheckCircle } from 'lucide-react'
+import { CourseContent } from '../services/courseGeneration'
+import { CourseProgress } from './CourseProgress'
+import confetti from 'canvas-confetti'
 
 interface CourseSuccessProps {
-  courseContent: CourseContent;
-  onBackToHome: () => void;
+  courseContent: CourseContent
+  onBackToHome: () => void
 }
 
-export function CourseSuccess({ courseContent, onBackToHome }: CourseSuccessProps) {
+export function CourseSuccess({
+  courseContent,
+  onBackToHome,
+}: CourseSuccessProps) {
   useEffect(() => {
     // Trigger confetti animation when component mounts
     const triggerConfetti = () => {
@@ -21,8 +23,15 @@ export function CourseSuccess({ courseContent, onBackToHome }: CourseSuccessProp
         particleCount: 100,
         spread: 70,
         origin: { y: 0.6 },
-        colors: ['#3b82f6', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444']
-      });
+        colors: [
+          '#3b82f6',
+          '#8b5cf6',
+          '#06b6d4',
+          '#10b981',
+          '#f59e0b',
+          '#ef4444',
+        ],
+      })
 
       // Add some delayed confetti for a more dynamic effect
       setTimeout(() => {
@@ -30,22 +39,22 @@ export function CourseSuccess({ courseContent, onBackToHome }: CourseSuccessProp
           particleCount: 50,
           spread: 50,
           origin: { y: 0.7, x: 0.3 },
-          colors: ['#ec4899', '#8b5cf6', '#06b6d4', '#f59e0b']
-        });
-      }, 200);
+          colors: ['#ec4899', '#8b5cf6', '#06b6d4', '#f59e0b'],
+        })
+      }, 200)
 
       setTimeout(() => {
         confetti({
           particleCount: 50,
           spread: 50,
           origin: { y: 0.7, x: 0.7 },
-          colors: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444']
-        });
-      }, 400);
-    };
+          colors: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444'],
+        })
+      }, 400)
+    }
 
-    triggerConfetti();
-  }, []);
+    triggerConfetti()
+  }, [])
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
@@ -61,12 +70,19 @@ export function CourseSuccess({ courseContent, onBackToHome }: CourseSuccessProp
         <div className="max-w-2xl mx-auto">
           <Card className="border-0 shadow-none bg-transparent">
             <CardHeader className="text-center pb-16">
-              <CheckCircle className="h-16 w-16 text-primary mx-auto mb-6 animate-bounce" style={{ animationDuration: '2s', animationIterationCount: 'infinite' }} />
+              <CheckCircle
+                className="h-16 w-16 text-primary mx-auto mb-6 animate-bounce"
+                style={{
+                  animationDuration: '2s',
+                  animationIterationCount: 'infinite',
+                }}
+              />
               <CardTitle className="text-4xl font-bold break-words leading-tight px-4 mb-4">
                 Congratulations!
               </CardTitle>
               <p className="text-xl text-muted-foreground break-words px-4 leading-relaxed">
-                You have successfully completed the course: <strong>{courseContent.title}</strong>
+                You have successfully completed the course:{' '}
+                <strong>{courseContent.title}</strong>
               </p>
             </CardHeader>
             <CardContent className="text-center">
@@ -81,5 +97,5 @@ export function CourseSuccess({ courseContent, onBackToHome }: CourseSuccessProp
         </div>
       </div>
     </div>
-  );
+  )
 }
