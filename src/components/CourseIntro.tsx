@@ -25,14 +25,18 @@ export function CourseIntro({ courseContent, onStartCourse, onGoHome }: CourseIn
       <div className="pt-20 px-4 pb-24">
         <div className="max-w-2xl mx-auto">
           <Card className="border-0 shadow-none bg-transparent">
-            <CardHeader className="text-center pb-6">
-              <BookOpen className="h-16 w-16 text-primary mx-auto mb-6" />
-              <CardTitle className="text-4xl font-bold break-words leading-tight px-4 mb-4">
-                {courseContent.title}
-              </CardTitle>
-              <p className="text-xl text-muted-foreground break-words px-4 leading-relaxed">
-                {courseContent.description}
-              </p>
+            <CardHeader className="pb-6">
+              <div className="text-center mb-6">
+                <BookOpen className="h-16 w-16 text-primary mx-auto" />
+              </div>
+              <div className="text-left">
+                <CardTitle className="text-4xl font-bold break-words leading-tight mb-4">
+                  {courseContent.title}
+                </CardTitle>
+                <p className="text-xl text-muted-foreground break-words leading-relaxed">
+                  {courseContent.description}
+                </p>
+              </div>
             </CardHeader>
             <CardContent className="text-center">
               <Button
