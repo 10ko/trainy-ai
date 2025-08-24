@@ -18,8 +18,6 @@ function App() {
 
   useEffect(() => {
     const configured = isApiKeyConfigured();
-    console.log('API Key configured:', configured);
-    console.log('Environment variable:', import.meta.env.VITE_OPENROUTER_API_KEY);
     setApiKeyConfigured(configured);
   }, []);
 
